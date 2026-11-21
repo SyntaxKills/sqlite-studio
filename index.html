@@ -121,7 +121,7 @@
     }
 
     /* =========================================================================
-       3. LAYOUT PRINCIPAL DA APLICAÇÃO (TELA ÚNICA)
+       3. LAYOUT PRINCIPAL DA APLICAÇÃO
        ========================================================================= */
     .app-shell {
       min-height: 100dvh;
@@ -130,11 +130,12 @@
       background-color: var(--bg-main);
     }
 
-    /* Barra superior compacta */
+    /* Barra superior com centralização real no eixo horizontal da viewport */
     .topbar {
-      display: flex;
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      justify-content: space-between;
       gap: 12px;
       padding: 10px 18px;
       background-color: var(--bg-secondary);
@@ -142,11 +143,25 @@
       flex-shrink: 0;
     }
 
-    .brand-group {
+    .topbar-left {
       display: flex;
       align-items: center;
       gap: 10px;
+      justify-self: start;
       min-width: 0;
+      z-index: 1;
+    }
+
+    .brand-group {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-width: 0;
+      pointer-events: auto;
     }
 
     .brand-badge {
@@ -171,29 +186,14 @@
       white-space: nowrap;
     }
 
-    .env-meta {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      color: var(--text-secondary);
-      font-family: var(--font-mono);
-    }
-
-    .env-chip {
-      padding: 2px 8px;
-      border-radius: 999px;
-      background-color: var(--bg-panel);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-secondary);
-      white-space: nowrap;
-    }
-
     .status-group {
+      grid-column: 3;
+      justify-self: end;
       display: flex;
       align-items: center;
       gap: 10px;
       flex-shrink: 0;
+      z-index: 1;
     }
 
     .engine-status {
@@ -249,14 +249,67 @@
       50% { opacity: 1; transform: scale(1.15); }
     }
 
+    /* Navegação principal: Console e Tabelas */
+    .nav-tabs {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px;
+      border-radius: var(--radius-md);
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .nav-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 28px;
+      padding: 0 11px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 12.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .nav-tab:hover:not(:disabled) {
+      color: var(--text-primary);
+      background-color: var(--bg-hover);
+    }
+
+    .nav-tab[aria-selected="true"] {
+      background-color: var(--blue-soft);
+      border-color: rgba(59, 130, 246, 0.4);
+      color: var(--blue-light);
+      font-weight: 600;
+    }
+
+    .nav-count {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 1px 5px;
+      border-radius: 999px;
+      background-color: var(--bg-elevated);
+      color: var(--text-secondary);
+    }
+
     /* Área de trabalho central */
     .workspace {
       flex: 1 1 auto;
       display: grid;
-      grid-template-rows: minmax(230px, 1.05fr) minmax(240px, 1.15fr);
+      grid-template-rows: minmax(220px, 1fr) minmax(230px, 1.15fr);
       gap: 14px;
       padding: 14px 18px;
       min-height: 0;
+    }
+
+    .workspace[hidden] {
+      display: none;
     }
 
     /* Painéis principais */
@@ -333,6 +386,13 @@
       white-space: nowrap;
     }
 
+    .btn-sm {
+      height: 28px;
+      padding: 0 10px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
     .btn:disabled {
       opacity: 0.48;
       cursor: not-allowed;
@@ -382,6 +442,18 @@
       background-color: var(--bg-hover);
       color: var(--text-primary);
       border-color: var(--border-strong);
+    }
+
+    .btn-danger {
+      background-color: var(--red-soft);
+      color: #fca5a5;
+      border-color: rgba(239, 68, 68, 0.35);
+    }
+
+    .btn-danger:hover:not(:disabled) {
+      background-color: var(--red-clear);
+      border-color: var(--red-clear);
+      color: #ffffff;
     }
 
     .btn-report {
@@ -457,7 +529,6 @@
       background: rgba(59, 130, 246, 0.24) !important;
     }
 
-    /* Syntax Highlighting inspirado no VS Code */
     .cm-s-default .cm-keyword {
       color: #60a5fa;
       font-weight: 600;
@@ -527,7 +598,7 @@
       font-family: var(--font-sans);
       font-size: 13px;
       padding: 20px 12px;
-      max-width: 460px;
+      max-width: 480px;
     }
 
     .log-entry {
@@ -633,6 +704,17 @@
       font-size: 12px;
     }
 
+    .error-pointer {
+      color: #fca5a5;
+      font-size: 11.5px;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      background-color: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      white-space: pre;
+      overflow-x: auto;
+    }
+
     .log-message {
       margin: 0;
       color: var(--text-primary);
@@ -641,7 +723,6 @@
       line-height: 1.5;
     }
 
-    /* Tabela de resultados SELECT */
     .result-table-wrap {
       width: 100%;
       max-height: 300px;
@@ -711,13 +792,230 @@
     }
 
     /* =========================================================================
-       6. PAINEL COMPACTO DE RELATO DE PROBLEMAS (NA TELA PRINCIPAL)
+       6. SEÇÃO TABELAS E GERENCIAMENTO REAL DO BANCO SQLITE
+       ========================================================================= */
+    .tables-workspace {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      padding: 14px 18px;
+      min-height: 0;
+    }
+
+    .tables-workspace[hidden] {
+      display: none;
+    }
+
+    .tables-body {
+      flex: 1 1 auto;
+      overflow: auto;
+      padding: 14px;
+      background-color: var(--bg-main);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 0;
+    }
+
+    .tables-grid-wrap {
+      width: 100%;
+      overflow: auto;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      background-color: var(--bg-secondary);
+    }
+
+    .tables-list-table {
+      width: 100%;
+      min-width: 540px;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    .tables-list-table thead th {
+      background-color: var(--bg-elevated);
+      color: var(--text-secondary);
+      font-size: 11.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border-strong);
+      white-space: nowrap;
+    }
+
+    .tables-list-table tbody td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      vertical-align: middle;
+    }
+
+    .tables-list-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .tables-list-table tbody tr:hover {
+      background-color: rgba(59, 130, 246, 0.05);
+    }
+
+    .table-name-mono {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--blue-light);
+    }
+
+    .table-meta-mono {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .table-row-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* =========================================================================
+       7. MODAIS DE EDIÇÃO E CONFIRMAÇÃO DE EXCLUSÃO DE TABELA
+       ========================================================================= */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(3, 7, 14, 0.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 50;
+    }
+
+    .modal-backdrop.is-open {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(560px, 100%);
+      max-height: 88dvh;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 16px;
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .modal-title {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .modal-body {
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 12px 16px;
+      background-color: var(--bg-secondary);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .modal-input {
+      width: 100%;
+      height: 36px;
+      padding: 0 11px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-strong);
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+
+    .modal-input:focus {
+      border-color: var(--blue-accent);
+      outline: none;
+    }
+
+    .modal-cols-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .add-col-row {
+      display: grid;
+      grid-template-columns: 1fr 150px;
+      gap: 8px;
+    }
+
+    .modal-select {
+      height: 36px;
+      padding: 0 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-strong);
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+    }
+
+    .modal-feedback {
+      padding: 8px 11px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      display: none;
+    }
+
+    .modal-feedback.is-visible {
+      display: block;
+    }
+
+    .modal-feedback[data-type="error"] {
+      background-color: var(--red-soft);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #fca5a5;
+    }
+
+    /* =========================================================================
+       8. PAINEL COMPACTO DE RELATO DE PROBLEMAS
        ========================================================================= */
     .report-drawer {
       position: fixed;
       right: 18px;
       bottom: 52px;
-      width: min(430px, calc(100vw - 24px));
+      width: min(440px, calc(100vw - 24px));
       background-color: var(--bg-panel);
       border: 1px solid var(--border-strong);
       border-radius: var(--radius-lg);
@@ -835,12 +1133,19 @@
       padding: 8px 10px;
       border-radius: var(--radius-sm);
       font-size: 12px;
-      line-height: 1.4;
+      line-height: 1.45;
       display: none;
+      word-break: break-word;
     }
 
     .report-feedback.is-visible {
       display: block;
+    }
+
+    .report-feedback a {
+      color: var(--blue-light);
+      font-weight: 600;
+      text-decoration: underline;
     }
 
     .report-feedback[data-type="warn"] {
@@ -870,7 +1175,7 @@
     }
 
     /* =========================================================================
-       7. RODAPÉ
+       9. RODAPÉ
        ========================================================================= */
     .footer {
       display: flex;
@@ -898,20 +1203,36 @@
     }
 
     /* =========================================================================
-       8. RESPONSIVIDADE (MOBILE, TABLET, NOTEBOOK, DESKTOP)
+       10. RESPONSIVIDADE (MOBILE, TABLET, NOTEBOOK, DESKTOP)
        ========================================================================= */
-    @media (max-width: 900px) {
-      .env-meta {
-        display: none;
+    @media (max-width: 780px) {
+      .topbar {
+        position: static;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 9px 12px;
+        gap: 8px;
+      }
+
+      .brand-group {
+        position: static;
+        transform: none;
+        order: 1;
+      }
+
+      .status-group {
+        order: 2;
+      }
+
+      .topbar-left {
+        order: 3;
+        width: 100%;
+        justify-content: flex-start;
       }
     }
 
     @media (max-width: 640px) {
-      .topbar {
-        padding: 9px 12px;
-        flex-wrap: wrap;
-      }
-
       .brand-title {
         font-size: 14px;
       }
@@ -921,14 +1242,19 @@
         padding: 4px 8px;
       }
 
-      .workspace {
+      .workspace,
+      .tables-workspace {
         padding: 10px 12px;
+      }
+
+      .workspace {
         gap: 10px;
-        grid-template-rows: minmax(210px, 1fr) minmax(230px, 1.1fr);
+        grid-template-rows: minmax(200px, 1fr) minmax(220px, 1.1fr);
       }
 
       .panel-header {
         padding: 8px 10px;
+        flex-wrap: wrap;
       }
 
       .shortcut-hint {
@@ -936,12 +1262,21 @@
       }
 
       .btn {
-        height: 36px;
-        padding: 0 12px;
+        height: 34px;
+        padding: 0 11px;
+      }
+
+      .btn-sm {
+        height: 28px;
+        padding: 0 9px;
       }
 
       .CodeMirror {
         font-size: 13px !important;
+      }
+
+      .add-col-row {
+        grid-template-columns: 1fr;
       }
 
       .footer {
@@ -959,8 +1294,34 @@
 </head>
 <body>
   <div class="app-shell" id="appRoot">
-    <!-- A. ÁREA SUPERIOR -->
+    <!-- A. BARRA SUPERIOR -->
     <header class="topbar" role="banner">
+      <div class="topbar-left">
+        <nav class="nav-tabs" role="tablist" aria-label="Navegação principal">
+          <button
+            type="button"
+            id="tabConsole"
+            class="nav-tab"
+            role="tab"
+            aria-selected="true"
+            aria-controls="mainWorkspace"
+          >
+            <span>Console</span>
+          </button>
+          <button
+            type="button"
+            id="tabTables"
+            class="nav-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="tablesWorkspace"
+          >
+            <span>Tabelas</span>
+            <span id="tablesCountBadge" class="nav-count">0</span>
+          </button>
+        </nav>
+      </div>
+
       <div class="brand-group">
         <span class="brand-badge" aria-hidden="true">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -970,10 +1331,6 @@
           </svg>
         </span>
         <h1 class="brand-title">SQLite Studio</h1>
-        <div class="env-meta" aria-label="Ambiente de execução">
-          <span class="env-chip">SQLite WASM</span>
-          <span class="env-chip">In-Memory</span>
-        </div>
       </div>
 
       <div class="status-group">
@@ -985,13 +1342,18 @@
           aria-live="polite"
         >
           <span class="status-dot" aria-hidden="true"></span>
-          <span id="engineStatusText">Inicializando SQLite...</span>
+          <span id="engineStatusText">Painel</span>
         </div>
       </div>
     </header>
 
-    <!-- B & C. ÁREA PRINCIPAL (EDITOR SQL + CONSOLE DE EXECUÇÃO) -->
-    <main class="workspace" id="mainWorkspace">
+    <!-- B & C. ÁREA PRINCIPAL — CATEGORIA CONSOLE -->
+    <main
+      class="workspace"
+      id="mainWorkspace"
+      role="tabpanel"
+      aria-labelledby="tabConsole"
+    >
       <!-- B. EDITOR SQL -->
       <section class="panel" aria-labelledby="editorHeading">
         <div class="panel-header">
@@ -1047,13 +1409,168 @@
           aria-relevant="additions"
         >
           <div id="consoleEmptyState" class="console-empty">
-            Aguardando execução de comandos SQL. O banco em memória permanece ativo durante toda a sessão.
+            Digite e execute comandos SQL no editor acima.
           </div>
         </div>
       </section>
     </main>
 
-    <!-- PAINEL COMPACTO DE RELATO DE PROBLEMAS (DENTRO DA TELA PRINCIPAL) -->
+    <!-- D. CATEGORIA TABELAS -->
+    <section
+      class="tables-workspace"
+      id="tablesWorkspace"
+      role="tabpanel"
+      aria-labelledby="tabTables"
+      hidden
+    >
+      <div class="panel" style="flex: 1 1 auto;">
+        <div class="panel-header">
+          <div class="panel-title-wrap">
+            <h2 class="panel-title" id="tablesHeading">Tabelas do Banco</h2>
+          </div>
+          <div class="editor-actions">
+            <button
+              type="button"
+              id="refreshTablesBtn"
+              class="btn btn-ghost btn-sm"
+              aria-label="Atualizar listagem de tabelas"
+            >
+              Atualizar
+            </button>
+          </div>
+        </div>
+
+        <div id="tablesBody" class="tables-body">
+          <div id="tablesEmptyState" class="console-empty">
+            Nenhuma tabela encontrada no banco SQLite. Crie uma tabela no Console para gerenciá-la aqui.
+          </div>
+
+          <div id="tablesGridWrap" class="tables-grid-wrap" hidden>
+            <table class="tables-list-table">
+              <thead>
+                <tr>
+                  <th scope="col">Tabela</th>
+                  <th scope="col">Colunas</th>
+                  <th scope="col">Linhas</th>
+                  <th scope="col">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tablesListTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODAL DE EDIÇÃO DE TABELA (RENOMEAR E ADICIONAR COLUNA) -->
+    <div
+      id="editTableModal"
+      class="modal-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="editTableModalTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 id="editTableModalTitle" class="modal-title">Editar tabela</h2>
+          <button
+            type="button"
+            id="closeEditTableModalBtn"
+            class="icon-close"
+            aria-label="Fechar modal de edição de tabela"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="field-group">
+            <label for="editTableNameInput" class="field-label">Nome da tabela</label>
+            <input
+              type="text"
+              id="editTableNameInput"
+              class="modal-input"
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="field-group">
+            <span class="field-label">Estrutura atual (colunas)</span>
+            <div id="editTableColumnsBox" class="modal-cols-list"></div>
+          </div>
+
+          <div class="field-group">
+            <label for="newColumnNameInput" class="field-label">Adicionar nova coluna (ALTER TABLE ADD COLUMN)</label>
+            <div class="add-col-row">
+              <input
+                type="text"
+                id="newColumnNameInput"
+                class="modal-input"
+                placeholder="nome_da_coluna"
+                autocomplete="off"
+              />
+              <select id="newColumnTypeSelect" class="modal-select" aria-label="Tipo da nova coluna">
+                <option value="TEXT">TEXT</option>
+                <option value="INTEGER">INTEGER</option>
+                <option value="REAL">REAL</option>
+                <option value="NUMERIC">NUMERIC</option>
+                <option value="BLOB">BLOB</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="editTableFeedback" class="modal-feedback" role="alert"></div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="cancelEditTableBtn" class="btn btn-ghost">Cancelar</button>
+          <button type="button" id="saveEditTableBtn" class="btn btn-primary">Salvar alterações</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO DE TABELA -->
+    <div
+      id="deleteTableModal"
+      class="modal-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="deleteTableModalTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 id="deleteTableModalTitle" class="modal-title">Confirmar exclusão de tabela</h2>
+          <button
+            type="button"
+            id="closeDeleteTableModalBtn"
+            class="icon-close"
+            aria-label="Fechar confirmação de exclusão"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <p id="deleteTableConfirmText" style="margin: 0; color: var(--text-primary); line-height: 1.55;"></p>
+          <div id="deleteTableFeedback" class="modal-feedback" role="alert"></div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="cancelDeleteTableBtn" class="btn btn-ghost">Cancelar</button>
+          <button type="button" id="confirmDeleteTableBtn" class="btn btn-danger">Excluir tabela</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAINEL COMPACTO DE RELATO DE PROBLEMAS -->
     <aside
       id="reportDrawer"
       class="report-drawer"
@@ -1089,8 +1606,8 @@
         </div>
 
         <div class="github-note">
-          <strong>Repositório alvo:</strong> <code>SyntaxKills/sqlite</code><br />
-          A criação direta de <em>Issues</em> via API autenticada do GitHub exige credencial/token de escrita; expor um token em um arquivo HTML estático no navegador comprometeria a segurança do repositório. Sem camada de backend autenticada, o envio direto autenticado não é simulado. Ao enviar, o relato é validado, estruturado com contexto da sessão e timestamp, e você pode abrir uma nova Issue pré-preenchida no GitHub ou copiar o payload formatado.
+          <strong>Repositório alvo:</strong> <code>SyntaxKills/sqlite-studio</code><br />
+          A criação automatizada de Issues via API autenticada do GitHub exige credencial de escrita no servidor; tokens não devem ser incluídos no código cliente. Ao enviar, o relato é preparado com título e contexto técnico e direcionado ao formulário oficial de Issues de <code>SyntaxKills/sqlite-studio</code> para finalização na sua conta GitHub.
         </div>
 
         <div
@@ -1147,8 +1664,12 @@
        ========================================================================= */
     const APP_CONFIG = Object.freeze({
       sqlJsCdnBase: "https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/",
-      githubRepoUrl: "https://github.com/SyntaxKills/sqlite",
-      githubIssuesNewUrl: "https://github.com/SyntaxKills/sqlite/issues/new",
+      githubRepoUrl: "https://github.com/SyntaxKills/sqlite-studio",
+      githubIssuesNewUrl: "https://github.com/SyntaxKills/sqlite-studio/issues/new",
+      idbDatabaseName: "SqliteStudioPersistenceDB",
+      idbStoreName: "sqlite_state",
+      idbSnapshotKey: "main_database_snapshot",
+      idbSessionKey: "session_state",
       maxRenderedRows: 500
     });
 
@@ -1156,12 +1677,17 @@
       initialized: false,
       engineStatus: "loading", // "loading" | "ready" | "error"
       isExecuting: false,
+      SQL: null,
       db: null,
       editor: null,
+      activeTab: "console", // "console" | "tables"
       executionCount: 0,
       reportSending: false,
       reportOpen: false,
-      lastPreparedReport: null
+      editingTableName: null,
+      deletingTableName: null,
+      persistTimer: null,
+      persistQueue: Promise.resolve()
     };
 
     const dom = {};
@@ -1170,6 +1696,12 @@
        CACHE DE ELEMENTOS DOM
        ========================================================================= */
     function cacheDomElements() {
+      dom.tabConsole = document.getElementById("tabConsole");
+      dom.tabTables = document.getElementById("tabTables");
+      dom.tablesCountBadge = document.getElementById("tablesCountBadge");
+      dom.mainWorkspace = document.getElementById("mainWorkspace");
+      dom.tablesWorkspace = document.getElementById("tablesWorkspace");
+
       dom.engineStatus = document.getElementById("engineStatus");
       dom.engineStatusText = document.getElementById("engineStatusText");
       dom.runBtn = document.getElementById("runBtn");
@@ -1178,6 +1710,30 @@
       dom.consoleOutput = document.getElementById("consoleOutput");
       dom.consoleEmptyState = document.getElementById("consoleEmptyState");
       dom.consoleSummary = document.getElementById("consoleSummary");
+
+      dom.refreshTablesBtn = document.getElementById("refreshTablesBtn");
+      dom.tablesBody = document.getElementById("tablesBody");
+      dom.tablesEmptyState = document.getElementById("tablesEmptyState");
+      dom.tablesGridWrap = document.getElementById("tablesGridWrap");
+      dom.tablesListTbody = document.getElementById("tablesListTbody");
+
+      dom.editTableModal = document.getElementById("editTableModal");
+      dom.editTableModalTitle = document.getElementById("editTableModalTitle");
+      dom.closeEditTableModalBtn = document.getElementById("closeEditTableModalBtn");
+      dom.cancelEditTableBtn = document.getElementById("cancelEditTableBtn");
+      dom.saveEditTableBtn = document.getElementById("saveEditTableBtn");
+      dom.editTableNameInput = document.getElementById("editTableNameInput");
+      dom.editTableColumnsBox = document.getElementById("editTableColumnsBox");
+      dom.newColumnNameInput = document.getElementById("newColumnNameInput");
+      dom.newColumnTypeSelect = document.getElementById("newColumnTypeSelect");
+      dom.editTableFeedback = document.getElementById("editTableFeedback");
+
+      dom.deleteTableModal = document.getElementById("deleteTableModal");
+      dom.closeDeleteTableModalBtn = document.getElementById("closeDeleteTableModalBtn");
+      dom.cancelDeleteTableBtn = document.getElementById("cancelDeleteTableBtn");
+      dom.confirmDeleteTableBtn = document.getElementById("confirmDeleteTableBtn");
+      dom.deleteTableConfirmText = document.getElementById("deleteTableConfirmText");
+      dom.deleteTableFeedback = document.getElementById("deleteTableFeedback");
 
       dom.openReportBtn = document.getElementById("openReportBtn");
       dom.closeReportBtn = document.getElementById("closeReportBtn");
@@ -1190,7 +1746,7 @@
     }
 
     /* =========================================================================
-       FUNÇÕES UTILITÁRIAS E DE TEMPO
+       FUNÇÕES UTILITÁRIAS E SEGURANÇA DE IDENTIFICADORES SQLITE
        ========================================================================= */
     function formatCurrentTime() {
       const now = new Date();
@@ -1207,24 +1763,137 @@
       return `${(ms / 1000).toFixed(2)} s`;
     }
 
+    function quoteSqlIdentifier(identifier) {
+      return `"${String(identifier).replace(/"/g, '""')}"`;
+    }
+
+    function escapeSqlLiteral(value) {
+      return `'${String(value).replace(/'/g, "''")}'`;
+    }
+
     function updateConsoleSummary() {
       const count = appState.executionCount;
       dom.consoleSummary.textContent =
         count === 1 ? "1 execução" : `${count} execuções`;
     }
 
-    function setEngineStatus(state, message) {
+    function setEngineStatus(state, label) {
       appState.engineStatus = state;
       dom.engineStatus.dataset.state = state;
-      dom.engineStatusText.textContent = message;
+      dom.engineStatusText.textContent = label || "Painel";
 
       const canInteract = state === "ready" && !appState.isExecuting;
       dom.runBtn.disabled = !canInteract;
       dom.clearBtn.disabled = !canInteract;
+      dom.refreshTablesBtn.disabled = !canInteract;
 
       if (appState.editor) {
-        appState.editor.setOption("readOnly", state !== "ready" || appState.isExecuting ? "nocursor" : false);
+        appState.editor.setOption(
+          "readOnly",
+          state !== "ready" || appState.isExecuting ? "nocursor" : false
+        );
       }
+    }
+
+    /* =========================================================================
+       PERSISTÊNCIA REAL VIA INDEXEDDB (SNAPSHOT DO BANCO SQL.JS + ESTADO)
+       ========================================================================= */
+    function openPersistenceDb() {
+      return new Promise((resolve, reject) => {
+        if (typeof indexedDB === "undefined") {
+          reject(new Error("IndexedDB não disponível neste navegador."));
+          return;
+        }
+
+        const request = indexedDB.open(APP_CONFIG.idbDatabaseName, 1);
+
+        request.onupgradeneeded = () => {
+          const db = request.result;
+          if (!db.objectStoreNames.contains(APP_CONFIG.idbStoreName)) {
+            db.createObjectStore(APP_CONFIG.idbStoreName);
+          }
+        };
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () =>
+          reject(request.error || new Error("Falha ao abrir banco IndexedDB."));
+      });
+    }
+
+    function idbGet(key) {
+      return openPersistenceDb().then(
+        (idb) =>
+          new Promise((resolve, reject) => {
+            const tx = idb.transaction(APP_CONFIG.idbStoreName, "readonly");
+            const store = tx.objectStore(APP_CONFIG.idbStoreName);
+            const req = store.get(key);
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () =>
+              reject(req.error || new Error(`Falha ao ler chave '${key}' do IndexedDB.`));
+            tx.oncomplete = () => idb.close();
+          })
+      );
+    }
+
+    function idbPut(key, value) {
+      return openPersistenceDb().then(
+        (idb) =>
+          new Promise((resolve, reject) => {
+            const tx = idb.transaction(APP_CONFIG.idbStoreName, "readwrite");
+            const store = tx.objectStore(APP_CONFIG.idbStoreName);
+            const req = store.put(value, key);
+            req.onsuccess = () => resolve();
+            req.onerror = () =>
+              reject(req.error || new Error(`Falha ao gravar chave '${key}' no IndexedDB.`));
+            tx.oncomplete = () => idb.close();
+          })
+      );
+    }
+
+    async function persistDatabaseNow() {
+      if (!appState.db || appState.engineStatus !== "ready") return;
+
+      const exportedBytes = appState.db.export();
+      if (!(exportedBytes instanceof Uint8Array) || exportedBytes.byteLength === 0) {
+        return;
+      }
+
+      const sessionSnapshot = {
+        activeTab: appState.activeTab,
+        editorSql: appState.editor ? appState.editor.getValue() : "",
+        updatedAt: new Date().toISOString()
+      };
+
+      await idbPut(APP_CONFIG.idbSnapshotKey, exportedBytes);
+      await idbPut(APP_CONFIG.idbSessionKey, sessionSnapshot);
+    }
+
+    function scheduleDatabasePersist() {
+      if (appState.persistTimer) {
+        clearTimeout(appState.persistTimer);
+      }
+
+      appState.persistTimer = setTimeout(() => {
+        appState.persistTimer = null;
+        appState.persistQueue = appState.persistQueue
+          .then(() => persistDatabaseNow())
+          .catch((err) => {
+            console.error("Erro ao persistir banco no IndexedDB:", err);
+          });
+      }, 120);
+    }
+
+    async function flushPendingPersistence() {
+      if (appState.persistTimer) {
+        clearTimeout(appState.persistTimer);
+        appState.persistTimer = null;
+      }
+      appState.persistQueue = appState.persistQueue
+        .then(() => persistDatabaseNow())
+        .catch((err) => {
+          console.error("Erro ao sincronizar persistência final:", err);
+        });
+      await appState.persistQueue;
     }
 
     /* =========================================================================
@@ -1263,16 +1932,22 @@
         }
       });
 
-      // Garante editor limpo na abertura
+      // Editor inicia vazio por padrão
       editor.setValue("");
+      editor.on("change", () => {
+        if (appState.engineStatus === "ready" && !appState.isExecuting) {
+          scheduleDatabasePersist();
+        }
+      });
+
       appState.editor = editor;
     }
 
     /* =========================================================================
-       INICIALIZAÇÃO DO ENGINE SQLITE VIA SQL.JS (WEBMASSEMBLY)
+       INICIALIZAÇÃO E RESTAURAÇÃO DO ENGINE SQLITE VIA SQL.JS (WASM + IDB)
        ========================================================================= */
     async function initSqlEngine() {
-      setEngineStatus("loading", "Inicializando SQLite...");
+      setEngineStatus("loading", "Painel");
 
       try {
         if (typeof window.initSqlJs !== "function") {
@@ -1282,29 +1957,69 @@
         const SQL = await window.initSqlJs({
           locateFile: (file) => `${APP_CONFIG.sqlJsCdnBase}${file}`
         });
+        appState.SQL = SQL;
 
-        // Cria instância única em memória para toda a sessão
-        appState.db = new SQL.Database();
-        setEngineStatus("ready", "SQLite pronto");
+        let restoredBytes = null;
+        let restoredSession = null;
+
+        try {
+          const rawBytes = await idbGet(APP_CONFIG.idbSnapshotKey);
+          if (rawBytes instanceof Uint8Array && rawBytes.byteLength > 0) {
+            restoredBytes = rawBytes;
+          } else if (ArrayBuffer.isView(rawBytes) && rawBytes.byteLength > 0) {
+            restoredBytes = new Uint8Array(
+              rawBytes.buffer,
+              rawBytes.byteOffset,
+              rawBytes.byteLength
+            );
+          } else if (rawBytes instanceof ArrayBuffer && rawBytes.byteLength > 0) {
+            restoredBytes = new Uint8Array(rawBytes);
+          }
+
+          const rawSession = await idbGet(APP_CONFIG.idbSessionKey);
+          if (rawSession && typeof rawSession === "object") {
+            restoredSession = rawSession;
+          }
+        } catch (idbErr) {
+          console.error("Aviso na leitura do IndexedDB:", idbErr);
+        }
+
+        appState.db = restoredBytes
+          ? new SQL.Database(restoredBytes)
+          : new SQL.Database();
+
+        if (restoredSession && typeof restoredSession.editorSql === "string" && appState.editor) {
+          appState.editor.setValue(restoredSession.editorSql);
+          appState.editor.clearHistory();
+        }
+
+        setEngineStatus("ready", "Painel");
+        refreshTablesList();
+
+        if (restoredSession && restoredSession.activeTab === "tables") {
+          switchTab("tables", { persist: false });
+        }
       } catch (err) {
-        const detail = err && err.message ? err.message : "Erro desconhecido ao carregar WebAssembly.";
-        setEngineStatus("error", "Falha ao inicializar SQLite");
+        const detail =
+          err && err.message ? err.message : "Erro desconhecido ao carregar WebAssembly.";
+        setEngineStatus("error", "Painel");
         appendConsoleEntry({
           kind: "error",
           operation: "ENGINE INIT",
           status: "FALHA",
-          message: `Não foi possível inicializar a engine SQLite em memória (WebAssembly). Verifique sua conexão ou bloqueadores de CDN.\nDetalhe técnico: ${detail}`,
+          message: `Não foi possível inicializar o SQLite WASM.\n${detail}`,
           durationMs: 0
         });
       }
     }
 
     /* =========================================================================
-       PARSING E CLASSIFICAÇÃO DE INSTRUÇÕES SQL
+       PARSING, POSIÇÃO DE ERRO E EXECUÇÃO SQL NO SQL.JS
        ========================================================================= */
-    function splitSqlStatements(sqlText) {
+    function splitSqlStatementsWithOffsets(sqlText) {
       const statements = [];
       let current = "";
+      let startOffset = 0;
       let inSingleQuote = false;
       let inDoubleQuote = false;
       let inBracketQuote = false;
@@ -1392,20 +2107,29 @@
         }
 
         if (ch === ";") {
+          const leadingTrim = current.length - current.trimStart().length;
           const trimmed = current.trim();
           if (trimmed.length > 0) {
-            statements.push(trimmed);
+            statements.push({
+              sql: trimmed,
+              startOffset: startOffset + leadingTrim
+            });
           }
           current = "";
+          startOffset = i + 1;
           continue;
         }
 
         current += ch;
       }
 
+      const leadingTrim = current.length - current.trimStart().length;
       const tail = current.trim();
       if (tail.length > 0) {
-        statements.push(tail);
+        statements.push({
+          sql: tail,
+          startOffset: startOffset + leadingTrim
+        });
       }
 
       return statements;
@@ -1463,20 +2187,76 @@
       return null;
     }
 
-    /* =========================================================================
-       EXECUÇÃO REAL DE INSTRUÇÕES SQL NO SQL.JS
-       ========================================================================= */
-    function executeSingleStatement(statement) {
+    function computeLineAndColumnFromOffset(fullText, offset) {
+      if (typeof fullText !== "string" || typeof offset !== "number" || offset < 0) {
+        return null;
+      }
+      const clamped = Math.min(offset, fullText.length);
+      const slice = fullText.slice(0, clamped);
+      const lines = slice.split("\n");
+      const line = lines.length;
+      const column = lines[lines.length - 1].length + 1;
+      const fullLines = fullText.split("\n");
+      const lineText = fullLines[line - 1] !== undefined ? fullLines[line - 1] : "";
+      return { line, column, lineText };
+    }
+
+    function inferErrorLocation(fullSqlText, stmtObj, rawErrorMessage) {
+      const msg = String(rawErrorMessage || "");
+
+      // Se o SQLite/driver informar explicitamente linha/coluna, usa diretamente
+      const explicitMatch = msg.match(/\b(?:line|linha)\s+(\d+)(?:\s*,\s*(?:column|coluna)\s+(\d+))?/i);
+      if (explicitMatch) {
+        const line = Number(explicitMatch[1]);
+        const column = explicitMatch[2] ? Number(explicitMatch[2]) : null;
+        const fullLines = fullSqlText.split("\n");
+        const lineText = fullLines[line - 1] !== undefined ? fullLines[line - 1] : null;
+        return { line, column, lineText };
+      }
+
+      // Verifica erros óbvios na própria instrução (ex.: cláusula WHERE/ORDER BY/GROUP BY vazia no final)
+      const trailingClauseMatch = stmtObj.sql.match(
+        /\b(WHERE|GROUP\s+BY|ORDER\s+BY|HAVING|VALUES|SET|INTO|FROM|JOIN|ON)\s*$/i
+      );
+      if (trailingClauseMatch) {
+        const localIdx = stmtObj.sql.length;
+        return computeLineAndColumnFromOffset(fullSqlText, stmtObj.startOffset + localIdx);
+      }
+
+      // Verifica token inexistente mencionado como "no such table: X" ou "no such column: X"
+      const missingEntityMatch = msg.match(/no such (?:table|column):\s*([a-zA-Z0-9_."`]+)/i);
+      if (missingEntityMatch) {
+        const target = missingEntityMatch[1].replace(/["`]/g, "");
+        const localIdx = stmtObj.sql.toLowerCase().indexOf(target.toLowerCase());
+        if (localIdx !== -1) {
+          return computeLineAndColumnFromOffset(fullSqlText, stmtObj.startOffset + localIdx);
+        }
+      }
+
+      return null;
+    }
+
+    function sanitizeSqlError(message) {
+      return String(message).replace(/\s+at\s+[^\n]+/g, "").trim();
+    }
+
+    function executeSingleStatement(stmtObj, fullSqlText) {
+      const statement = stmtObj.sql;
       const operation = detectSqlOperation(statement);
       const startPerf = performance.now();
 
       const incompleteReason = hasIncompleteSyntax(statement);
       if (incompleteReason) {
+        const loc = computeLineAndColumnFromOffset(
+          fullSqlText,
+          stmtObj.startOffset + statement.length
+        );
         return {
           ok: false,
           operation,
           statement,
           errorMessage: incompleteReason,
+          errorLocation: loc,
           durationMs: performance.now() - startPerf
         };
       }
@@ -1487,7 +2267,6 @@
         const changesAfter = appState.db.getRowsModified();
         const durationMs = performance.now() - startPerf;
 
-        // Se retornou conjuntos de linhas (ex.: SELECT, PRAGMA com retorno)
         if (Array.isArray(rawResults) && rawResults.length > 0) {
           return {
             ok: true,
@@ -1499,28 +2278,21 @@
           };
         }
 
-        // Consultas SELECT sem registros retornados
         if (operation === "SELECT" || operation === "WITH" || operation === "EXPLAIN") {
           return {
             ok: true,
             kind: "info",
             operation,
             statement,
-            message: "Consulta executada com sucesso. Nenhum registro retornado.",
+            message: "Consulta sem registros retornados.",
             durationMs
           };
         }
 
-        // Instruções sem retorno tabular (CREATE, INSERT, UPDATE, DELETE, DROP, ALTER, etc.)
         const affectedRows =
           operation === "INSERT" || operation === "UPDATE" || operation === "DELETE"
             ? changesAfter
             : Math.max(0, changesAfter - changesBefore);
-
-        const detailParts = [`Operação ${operation} concluída com sucesso.`];
-        if (["INSERT", "UPDATE", "DELETE"].includes(operation)) {
-          detailParts.push(`Linhas afetadas: ${affectedRows}.`);
-        }
 
         return {
           ok: true,
@@ -1528,37 +2300,44 @@
           operation,
           statement,
           affectedRows,
-          message: detailParts.join(" "),
           durationMs
         };
       } catch (err) {
         const durationMs = performance.now() - startPerf;
         const rawMsg = err && err.message ? err.message : "Erro ao executar instrução SQL.";
+        const sanitized = sanitizeSqlError(rawMsg);
+        const location = inferErrorLocation(fullSqlText, stmtObj, sanitized);
+
         return {
           ok: false,
           kind: "error",
           operation,
           statement,
-          errorMessage: sanitizeSqlError(rawMsg),
+          errorMessage: sanitized,
+          errorLocation: location,
           durationMs
         };
       }
     }
 
-    function sanitizeSqlError(message) {
-      // Remove caminhos internos de arquivo/WASM caso existam, mantendo diagnóstico útil
-      return String(message).replace(/\s+at\s+[^\n]+/g, "").trim();
+    function clearConsoleEntriesForExecution() {
+      dom.consoleOutput.innerHTML = "";
+      dom.consoleOutput.appendChild(dom.consoleEmptyState);
+      dom.consoleEmptyState.style.display = "none";
+      appState.executionCount = 0;
+      updateConsoleSummary();
     }
 
     function handleRunSql() {
       if (appState.isExecuting) return;
 
       if (appState.engineStatus !== "ready" || !appState.db) {
+        clearConsoleEntriesForExecution();
         appendConsoleEntry({
           kind: "warn",
           operation: "ENGINE",
           status: "INDISPONÍVEL",
-          message: "A engine SQLite ainda não está pronta. Aguarde a inicialização antes de executar comandos.",
+          message: "A engine SQLite ainda não está pronta.",
           durationMs: 0
         });
         return;
@@ -1566,6 +2345,7 @@
 
       const rawSql = appState.editor ? appState.editor.getValue() : "";
       if (!rawSql || rawSql.trim().length === 0) {
+        clearConsoleEntriesForExecution();
         appendConsoleEntry({
           kind: "warn",
           operation: "EDITOR",
@@ -1576,65 +2356,97 @@
         return;
       }
 
-      const statements = splitSqlStatements(rawSql);
+      const statements = splitSqlStatementsWithOffsets(rawSql);
       if (statements.length === 0) {
+        clearConsoleEntriesForExecution();
         appendConsoleEntry({
           kind: "warn",
           operation: "EDITOR",
           status: "SEM COMANDO",
-          message: "Apenas comentários ou espaços em branco foram encontrados; nenhuma instrução SQL executada.",
+          message: "Nenhuma instrução SQL executável encontrada.",
           durationMs: 0
         });
         return;
       }
 
-      appState.isExecuting = true;
-      setEngineStatus("ready", "Executando SQL...");
+      // Limpa resíduos de execuções anteriores ao iniciar uma nova execução
+      clearConsoleEntriesForExecution();
 
-      const batchStart = performance.now();
+      appState.isExecuting = true;
+      setEngineStatus("ready", "Painel");
+
+      let mutatingOccurred = false;
 
       try {
+        const hasSelectAtEnd = ["SELECT", "WITH", "EXPLAIN"].includes(
+          detectSqlOperation(statements[statements.length - 1].sql)
+        );
+
         for (let i = 0; i < statements.length; i++) {
-          const stmt = statements[i];
-          const stepLabel =
-            statements.length > 1 ? ` [${i + 1}/${statements.length}]` : "";
-          const outcome = executeSingleStatement(stmt);
+          const stmtObj = statements[i];
+          const op = detectSqlOperation(stmtObj.sql);
+          const outcome = executeSingleStatement(stmtObj, rawSql);
 
           if (outcome.ok) {
-            appendConsoleEntry({
-              kind: outcome.kind,
-              operation: `${outcome.operation}${stepLabel}`,
-              status: outcome.kind === "info" ? "SEM DADOS" : "SUCESSO",
-              statement: stmt,
-              message: outcome.message || null,
-              resultSets: outcome.resultSets || null,
-              durationMs: outcome.durationMs
-            });
-          } else {
-            appendConsoleEntry({
-              kind: "error",
-              operation: `${outcome.operation}${stepLabel}`,
-              status: "ERRO",
-              statement: stmt,
-              message: outcome.errorMessage,
-              durationMs: outcome.durationMs
-            });
-            // Interrompe lote após erro e registra aviso sobre comandos subsequentes não executados
-            if (statements.length > 1 && i < statements.length - 1) {
+            if (op !== "SELECT" && op !== "WITH" && op !== "EXPLAIN") {
+              mutatingOccurred = true;
+            }
+
+            const isLastStatement = i === statements.length - 1;
+            const shouldRenderEntry =
+              Boolean(outcome.resultSets && outcome.resultSets.length > 0) ||
+              (isLastStatement && (!hasSelectAtEnd || outcome.kind === "info"));
+
+            if (shouldRenderEntry) {
               appendConsoleEntry({
-                kind: "warn",
-                operation: "LOTE SQL",
-                status: "INTERROMPIDO",
-                message: `Execução interrompida na instrução ${i + 1} de ${statements.length}. As ${statements.length - i - 1} instrução(ões) seguinte(s) não foram executadas.`,
-                durationMs: performance.now() - batchStart
+                kind: outcome.kind,
+                operation: outcome.operation,
+                status: outcome.kind === "info" ? "SEM DADOS" : "SUCESSO",
+                statement: statements.length > 1 ? null : outcome.statement,
+                message: outcome.message || null,
+                resultSets: outcome.resultSets || null,
+                durationMs: outcome.durationMs
               });
             }
+          } else {
+            // Falha interrompe a execução e limpa resultados/erros anteriores
+            clearConsoleEntriesForExecution();
+
+            let locationText = "";
+            let pointerLine = null;
+
+            if (outcome.errorLocation) {
+              const { line, column, lineText } = outcome.errorLocation;
+              locationText = column
+                ? `Linha ${line}, coluna ${column}: `
+                : `Linha ${line}: `;
+
+              if (typeof lineText === "string" && column && column >= 1) {
+                const caretPad = " ".repeat(Math.max(0, column - 1));
+                pointerLine = `${lineText}\n${caretPad}^`;
+              }
+            }
+
+            appendConsoleEntry({
+              kind: "error",
+              operation: outcome.operation,
+              status: "ERRO",
+              statement: outcome.statement,
+              pointerLine,
+              message: `${locationText}${outcome.errorMessage}`,
+              durationMs: outcome.durationMs
+            });
             break;
           }
         }
+
+        if (mutatingOccurred) {
+          refreshTablesList();
+          scheduleDatabasePersist();
+        }
       } finally {
         appState.isExecuting = false;
-        setEngineStatus("ready", "SQLite pronto");
+        setEngineStatus("ready", "Painel");
       }
     }
 
@@ -1650,22 +2462,20 @@
         appState.editor.focus();
       }
 
-      dom.consoleOutput.innerHTML = "";
-      dom.consoleOutput.appendChild(dom.consoleEmptyState);
+      clearConsoleEntriesForExecution();
       dom.consoleEmptyState.style.display = "block";
-
-      appState.executionCount = 0;
-      updateConsoleSummary();
+      scheduleDatabasePersist();
     }
 
     /* =========================================================================
-       RENDERIZAÇÃO DO CONSOLE E TABELAS DINÂMICAS
+       RENDERIZAÇÃO DO CONSOLE E TABELAS DE RESULTADO
        ========================================================================= */
     function appendConsoleEntry({
       kind = "info",
       operation = "SQL",
       status = "INFO",
       statement = null,
+      pointerLine = null,
       message = null,
       resultSets = null,
       durationMs = 0
@@ -1719,6 +2529,13 @@
         sqlPreview.className = "log-sql-preview";
         sqlPreview.textContent = statement;
         entry.appendChild(sqlPreview);
+      }
+
+      if (pointerLine) {
+        const ptrEl = document.createElement("div");
+        ptrEl.className = "error-pointer";
+        ptrEl.textContent = pointerLine;
+        entry.appendChild(ptrEl);
       }
 
       if (message) {
@@ -1807,7 +2624,336 @@
     }
 
     /* =========================================================================
-       SISTEMA DE RELATO DE PROBLEMAS E ARQUITETURA GITHUB
+       NAVEGAÇÃO ENTRE CATEGORIAS: CONSOLE E TABELAS
+       ========================================================================= */
+    function switchTab(tabName, options = {}) {
+      const nextTab = tabName === "tables" ? "tables" : "console";
+      appState.activeTab = nextTab;
+
+      const isConsole = nextTab === "console";
+      dom.tabConsole.setAttribute("aria-selected", String(isConsole));
+      dom.tabTables.setAttribute("aria-selected", String(!isConsole));
+
+      dom.mainWorkspace.hidden = !isConsole;
+      dom.tablesWorkspace.hidden = isConsole;
+
+      if (!isConsole) {
+        refreshTablesList();
+      } else if (appState.editor) {
+        requestAnimationFrame(() => {
+          appState.editor.refresh();
+        });
+      }
+
+      if (options.persist !== false && appState.engineStatus === "ready") {
+        scheduleDatabasePersist();
+      }
+    }
+
+    /* =========================================================================
+       GERENCIAMENTO DINÂMICO DE TABELAS DO BANCO SQLITE REAL
+       ========================================================================= */
+    function queryUserTables() {
+      if (!appState.db || appState.engineStatus !== "ready") return [];
+
+      const res = appState.db.exec(
+        "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY name ASC;"
+      );
+
+      if (!Array.isArray(res) || res.length === 0 || !res[0].values) {
+        return [];
+      }
+
+      const names = res[0].values.map((row) => String(row[0]));
+
+      return names.map((name) => {
+        const quotedName = quoteSqlIdentifier(name);
+        let columnCount = 0;
+        let columns = [];
+        let rowCount = 0;
+
+        try {
+          const infoRes = appState.db.exec(`PRAGMA table_info(${quotedName});`);
+          if (infoRes.length > 0 && Array.isArray(infoRes[0].values)) {
+            columns = infoRes[0].values.map((col) => ({
+              name: String(col[1]),
+              type: String(col[2] || "ANY"),
+              notnull: Boolean(col[3]),
+              pk: Boolean(col[5])
+            }));
+            columnCount = columns.length;
+          }
+        } catch (_) {
+          columnCount = 0;
+        }
+
+        try {
+          const countRes = appState.db.exec(`SELECT COUNT(*) FROM ${quotedName};`);
+          if (countRes.length > 0 && countRes[0].values && countRes[0].values[0]) {
+            rowCount = Number(countRes[0].values[0][0]) || 0;
+          }
+        } catch (_) {
+          rowCount = 0;
+        }
+
+        return { name, columnCount, columns, rowCount };
+      });
+    }
+
+    function tableExistsInDb(tableName) {
+      if (!appState.db || appState.engineStatus !== "ready") return false;
+      const res = appState.db.exec(
+        `SELECT 1 FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' AND name = ${escapeSqlLiteral(tableName)} LIMIT 1;`
+      );
+      return Array.isArray(res) && res.length > 0 && res[0].values.length > 0;
+    }
+
+    function refreshTablesList() {
+      const tables = queryUserTables();
+      dom.tablesCountBadge.textContent = String(tables.length);
+      dom.tablesListTbody.innerHTML = "";
+
+      if (tables.length === 0) {
+        dom.tablesGridWrap.hidden = true;
+        dom.tablesEmptyState.style.display = "block";
+        return;
+      }
+
+      dom.tablesEmptyState.style.display = "none";
+      dom.tablesGridWrap.hidden = false;
+
+      for (const tbl of tables) {
+        const tr = document.createElement("tr");
+
+        const tdName = document.createElement("td");
+        const nameSpan = document.createElement("span");
+        nameSpan.className = "table-name-mono";
+        nameSpan.textContent = tbl.name;
+        tdName.appendChild(nameSpan);
+
+        const tdCols = document.createElement("td");
+        const colsSpan = document.createElement("span");
+        colsSpan.className = "table-meta-mono";
+        colsSpan.textContent = `${tbl.columnCount}`;
+        tdCols.appendChild(colsSpan);
+
+        const tdRows = document.createElement("td");
+        const rowsSpan = document.createElement("span");
+        rowsSpan.className = "table-meta-mono";
+        rowsSpan.textContent = `${tbl.rowCount}`;
+        tdRows.appendChild(rowsSpan);
+
+        const tdActions = document.createElement("td");
+        const actionsWrap = document.createElement("div");
+        actionsWrap.className = "table-row-actions";
+
+        const viewBtn = document.createElement("button");
+        viewBtn.type = "button";
+        viewBtn.className = "btn btn-primary btn-sm";
+        viewBtn.textContent = "Visualizar";
+        viewBtn.addEventListener("click", () => handleViewTableInConsole(tbl.name));
+
+        const editBtn = document.createElement("button");
+        editBtn.type = "button";
+        editBtn.className = "btn btn-ghost btn-sm";
+        editBtn.textContent = "Editar";
+        editBtn.addEventListener("click", () => openEditTableModal(tbl.name));
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.type = "button";
+        deleteBtn.className = "btn btn-danger btn-sm";
+        deleteBtn.textContent = "Excluir";
+        deleteBtn.addEventListener("click", () => openDeleteTableModal(tbl.name));
+
+        actionsWrap.appendChild(viewBtn);
+        actionsWrap.appendChild(editBtn);
+        actionsWrap.appendChild(deleteBtn);
+        tdActions.appendChild(actionsWrap);
+
+        tr.appendChild(tdName);
+        tr.appendChild(tdCols);
+        tr.appendChild(tdRows);
+        tr.appendChild(tdActions);
+
+        dom.tablesListTbody.appendChild(tr);
+      }
+    }
+
+    /* =========================================================================
+       INTEGRAÇÃO AUTOMÁTICA: TABELAS -> CONSOLE
+       ========================================================================= */
+    function handleViewTableInConsole(tableName) {
+      if (!tableExistsInDb(tableName)) {
+        refreshTablesList();
+        return;
+      }
+
+      const safeIdentifier = quoteSqlIdentifier(tableName);
+      const generatedQuery = `SELECT * FROM ${safeIdentifier};`;
+
+      switchTab("console", { persist: true });
+
+      if (appState.editor) {
+        appState.editor.setValue(generatedQuery);
+        appState.editor.focus();
+      }
+
+      handleRunSql();
+    }
+
+    /* =========================================================================
+       EDIÇÃO E EXCLUSÃO REAL DE TABELAS NO SQLITE
+       ========================================================================= */
+    function setModalFeedback(el, message) {
+      if (!message) {
+        el.textContent = "";
+        el.classList.remove("is-visible");
+        delete el.dataset.type;
+        return;
+      }
+      el.dataset.type = "error";
+      el.textContent = message;
+      el.classList.add("is-visible");
+    }
+
+    function openEditTableModal(tableName) {
+      if (!tableExistsInDb(tableName)) {
+        refreshTablesList();
+        return;
+      }
+
+      const tables = queryUserTables();
+      const target = tables.find((t) => t.name === tableName);
+      if (!target) return;
+
+      appState.editingTableName = tableName;
+      dom.editTableModalTitle.textContent = `Editar tabela — ${tableName}`;
+      dom.editTableNameInput.value = tableName;
+      dom.newColumnNameInput.value = "";
+      dom.newColumnTypeSelect.value = "TEXT";
+      setModalFeedback(dom.editTableFeedback, null);
+
+      dom.editTableColumnsBox.innerHTML = "";
+      for (const col of target.columns) {
+        const line = document.createElement("div");
+        const pkTag = col.pk ? " [PK]" : "";
+        const nnTag = col.notnull ? " NOT NULL" : "";
+        line.textContent = `${col.name}: ${col.type}${nnTag}${pkTag}`;
+        dom.editTableColumnsBox.appendChild(line);
+      }
+
+      dom.editTableModal.classList.add("is-open");
+      dom.editTableModal.setAttribute("aria-hidden", "false");
+      dom.editTableNameInput.focus();
+    }
+
+    function closeEditTableModal() {
+      appState.editingTableName = null;
+      dom.editTableModal.classList.remove("is-open");
+      dom.editTableModal.setAttribute("aria-hidden", "true");
+      setModalFeedback(dom.editTableFeedback, null);
+    }
+
+    function handleSaveEditTable() {
+      const currentName = appState.editingTableName;
+      if (!currentName || !tableExistsInDb(currentName)) {
+        closeEditTableModal();
+        refreshTablesList();
+        return;
+      }
+
+      setModalFeedback(dom.editTableFeedback, null);
+
+      const newName = dom.editTableNameInput.value.trim();
+      const newColName = dom.newColumnNameInput.value.trim();
+      const newColType = dom.newColumnTypeSelect.value;
+
+      if (!newName) {
+        setModalFeedback(dom.editTableFeedback, "Informe um nome válido para a tabela.");
+        dom.editTableNameInput.focus();
+        return;
+      }
+
+      if (newColName && !/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(newColName)) {
+        setModalFeedback(
+          dom.editTableFeedback,
+          "Nome de coluna inválido. Use letras, números ou sublinhado, sem iniciar com número."
+        );
+        dom.newColumnNameInput.focus();
+        return;
+      }
+
+      try {
+        let activeName = currentName;
+
+        if (newName !== currentName) {
+          appState.db.exec(
+            `ALTER TABLE ${quoteSqlIdentifier(currentName)} RENAME TO ${quoteSqlIdentifier(newName)};`
+          );
+          activeName = newName;
+        }
+
+        if (newColName) {
+          appState.db.exec(
+            `ALTER TABLE ${quoteSqlIdentifier(activeName)} ADD COLUMN ${quoteSqlIdentifier(newColName)} ${newColType};`
+          );
+        }
+
+        refreshTablesList();
+        scheduleDatabasePersist();
+        closeEditTableModal();
+      } catch (err) {
+        const msg = err && err.message ? err.message : "Erro ao alterar estrutura da tabela.";
+        setModalFeedback(dom.editTableFeedback, sanitizeSqlError(msg));
+      }
+    }
+
+    function openDeleteTableModal(tableName) {
+      if (!tableExistsInDb(tableName)) {
+        refreshTablesList();
+        return;
+      }
+
+      appState.deletingTableName = tableName;
+      setModalFeedback(dom.deleteTableFeedback, null);
+      dom.deleteTableConfirmText.textContent = `Deseja realmente excluir permanentemente a tabela "${tableName}" e todos os seus dados do banco SQLite?`;
+
+      dom.deleteTableModal.classList.add("is-open");
+      dom.deleteTableModal.setAttribute("aria-hidden", "false");
+      dom.confirmDeleteTableBtn.focus();
+    }
+
+    function closeDeleteTableModal() {
+      appState.deletingTableName = null;
+      dom.deleteTableModal.classList.remove("is-open");
+      dom.deleteTableModal.setAttribute("aria-hidden", "true");
+      setModalFeedback(dom.deleteTableFeedback, null);
+    }
+
+    function handleConfirmDeleteTable() {
+      const targetName = appState.deletingTableName;
+      if (!targetName) {
+        closeDeleteTableModal();
+        return;
+      }
+
+      setModalFeedback(dom.deleteTableFeedback, null);
+
+      try {
+        if (tableExistsInDb(targetName)) {
+          appState.db.exec(`DROP TABLE ${quoteSqlIdentifier(targetName)};`);
+        }
+        refreshTablesList();
+        scheduleDatabasePersist();
+        closeDeleteTableModal();
+      } catch (err) {
+        const msg = err && err.message ? err.message : "Erro ao excluir tabela.";
+        setModalFeedback(dom.deleteTableFeedback, sanitizeSqlError(msg));
+      }
+    }
+
+    /* =========================================================================
+       SISTEMA DE RELATO DE PROBLEMAS -> GITHUB ISSUES (SYNTAXKILLS/SQLITE-STUDIO)
        ========================================================================= */
     function setReportDrawerOpen(open) {
       appState.reportOpen = Boolean(open);
@@ -1822,14 +2968,30 @@
       }
     }
 
-    function showReportFeedback(type, text) {
+    function showReportFeedback(type, content) {
       dom.reportFeedback.dataset.type = type;
-      dom.reportFeedback.textContent = text;
+      dom.reportFeedback.innerHTML = "";
+
+      if (typeof content === "string") {
+        dom.reportFeedback.textContent = content;
+      } else if (content && content.textBefore && content.url) {
+        dom.reportFeedback.appendChild(document.createTextNode(content.textBefore));
+        const link = document.createElement("a");
+        link.href = content.url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = content.linkLabel || "Abrir formulário de Issue no GitHub";
+        dom.reportFeedback.appendChild(link);
+        if (content.textAfter) {
+          dom.reportFeedback.appendChild(document.createTextNode(content.textAfter));
+        }
+      }
+
       dom.reportFeedback.classList.add("is-visible");
     }
 
     function clearReportFeedback() {
-      dom.reportFeedback.textContent = "";
+      dom.reportFeedback.innerHTML = "";
       dom.reportFeedback.classList.remove("is-visible");
       delete dom.reportFeedback.dataset.type;
     }
@@ -1839,7 +3001,7 @@
       dom.submitReportBtn.disabled = sending;
       dom.cancelReportBtn.disabled = sending;
       dom.reportDescription.disabled = sending;
-      dom.submitReportBtn.textContent = sending ? "Enviando..." : "Enviar";
+      dom.submitReportBtn.textContent = sending ? "Preparando..." : "Enviar";
     }
 
     function buildIssuePayload(description) {
@@ -1850,28 +3012,29 @@
           ? `${firstLine.slice(0, 69).trim()}...`
           : firstLine || "Relato de problema no SQLite Studio";
 
+      const tablesCount = queryUserTables().length;
+
       const body = [
         "## Descrição do problema",
         description,
         "",
-        "## Contexto da aplicação",
-        `- **Aplicação:** SQLite Studio (single-file HTML + sql.js WASM)`,
-        `- **Status da engine:** ${appState.engineStatusText.textContent}`,
-        `- **Execuções na sessão:** ${appState.executionCount}`,
+        "## Contexto técnico",
+        `- **Aplicação:** SQLite Studio (SQLite WASM + IndexedDB)`,
+        `- **Seção ativa:** ${appState.activeTab}`,
+        `- **Tabelas no banco:** ${tablesCount}`,
         `- **User Agent:** ${navigator.userAgent}`,
-        `- **Timestamp:** ${timestampIso}`
+        `- **Data/Hora (UTC):** ${timestampIso}`
       ].join("\n");
 
       return {
-        repository: "SyntaxKills/sqlite",
-        label: "bug",
+        repository: "SyntaxKills/sqlite-studio",
         title,
         body,
         timestamp: timestampIso
       };
     }
 
-    async function handleReportSubmit(event) {
+    function handleReportSubmit(event) {
       event.preventDefault();
       if (appState.reportSending) return;
 
@@ -1881,7 +3044,7 @@
       if (!description) {
         showReportFeedback(
           "warn",
-          "Por favor, descreva o problema antes de enviar. Relatos vazios não são permitidos."
+          "Descreva o problema antes de enviar o relato."
         );
         dom.reportDescription.focus();
         return;
@@ -1891,33 +3054,28 @@
 
       try {
         const payload = buildIssuePayload(description);
-        appState.lastPreparedReport = payload;
-
-        // Verificação arquitetural explícita:
-        // Criar uma Issue diretamente via REST API do GitHub (POST /repos/SyntaxKills/sqlite/issues)
-        // exige autenticação (ex.: GitHub App / OAuth / PAT com escopo de escrita).
-        // Em um index.html estático sem backend intermediário, não há como autenticar com segurança
-        // sem expor segredos no código cliente. Portanto, não simulamos confirmação de envio.
         const issueUrl = new URL(APP_CONFIG.githubIssuesNewUrl);
         issueUrl.searchParams.set("title", payload.title);
         issueUrl.searchParams.set("body", payload.body);
-        issueUrl.searchParams.set("labels", payload.label);
 
-        showReportFeedback(
-          "info",
-          `Envio automático autenticado indisponível sem backend seguro (tokens não podem ser expostos no navegador). Relato estruturado em ${payload.timestamp} (${payload.repository}). Abra o formulário oficial de Issues do repositório para concluir o registro autenticado na sua conta GitHub: ${issueUrl.toString()}`
-        );
+        // Criação automática autenticada via API do GitHub exige credencial de escrita no servidor,
+        // que não deve ser exposta no código client-side. Encaminhamos para o formulário oficial
+        // pré-preenchido em SyntaxKills/sqlite-studio para conclusão pelo usuário.
+        window.open(issueUrl.toString(), "_blank", "noopener,noreferrer");
 
-        dom.submitReportBtn.textContent = "Enviado com sucesso";
+        showReportFeedback("info", {
+          textBefore:
+            "Relato preparado para SyntaxKills/sqlite-studio. A criação não ocorre automaticamente sem autenticação no servidor; conclua o envio no GitHub: ",
+          url: issueUrl.toString(),
+          linkLabel: "Abrir Issue pré-preenchida no GitHub",
+          textAfter: "."
+        });
       } catch (err) {
-        const detail = err && err.message ? err.message : "Falha inesperada ao preparar o relato.";
-        showReportFeedback("error", `Falha no envio: ${detail}`);
-        dom.submitReportBtn.textContent = "Falha no envio";
+        const detail =
+          err && err.message ? err.message : "Erro ao preparar o link da Issue.";
+        showReportFeedback("error", `Falha ao preparar relato: ${detail}`);
       } finally {
-        appState.reportSending = false;
-        dom.submitReportBtn.disabled = false;
-        dom.cancelReportBtn.disabled = false;
-        dom.reportDescription.disabled = false;
+        setReportSendingState(false);
       }
     }
 
@@ -1925,8 +3083,20 @@
        REGISTRO DE EVENTOS E INICIALIZAÇÃO CONTROLADA
        ========================================================================= */
     function bindEvents() {
+      dom.tabConsole.addEventListener("click", () => switchTab("console"));
+      dom.tabTables.addEventListener("click", () => switchTab("tables"));
+      dom.refreshTablesBtn.addEventListener("click", () => refreshTablesList());
+
       dom.runBtn.addEventListener("click", handleRunSql);
       dom.clearBtn.addEventListener("click", handleClearInterface);
+
+      dom.closeEditTableModalBtn.addEventListener("click", closeEditTableModal);
+      dom.cancelEditTableBtn.addEventListener("click", closeEditTableModal);
+      dom.saveEditTableBtn.addEventListener("click", handleSaveEditTable);
+
+      dom.closeDeleteTableModalBtn.addEventListener("click", closeDeleteTableModal);
+      dom.cancelDeleteTableBtn.addEventListener("click", closeDeleteTableModal);
+      dom.confirmDeleteTableBtn.addEventListener("click", handleConfirmDeleteTable);
 
       dom.openReportBtn.addEventListener("click", () => {
         setReportDrawerOpen(!appState.reportOpen);
@@ -1945,14 +3115,23 @@
       dom.reportDescription.addEventListener("input", () => {
         if (dom.reportFeedback.classList.contains("is-visible")) {
           clearReportFeedback();
-          dom.submitReportBtn.textContent = "Enviar";
         }
       });
 
       document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && appState.reportOpen && !appState.reportSending) {
-          setReportDrawerOpen(false);
+        if (event.key === "Escape") {
+          if (appState.editingTableName) {
+            closeEditTableModal();
+          } else if (appState.deletingTableName) {
+            closeDeleteTableModal();
+          } else if (appState.reportOpen && !appState.reportSending) {
+            setReportDrawerOpen(false);
+          }
         }
+      });
+
+      window.addEventListener("beforeunload", () => {
+        flushPendingPersistence();
       });
     }
 
@@ -1968,12 +3147,12 @@
         initSqlEditor();
       } catch (err) {
         const detail = err && err.message ? err.message : "Erro ao iniciar o editor.";
-        setEngineStatus("error", "Falha ao inicializar SQLite");
+        setEngineStatus("error", "Painel");
         appendConsoleEntry({
           kind: "error",
           operation: "EDITOR INIT",
           status: "FALHA",
-          message: `Erro ao inicializar o editor SQL.\nDetalhe técnico: ${detail}`,
+          message: `Erro ao inicializar o editor SQL.\n${detail}`,
           durationMs: 0
         });
         return;
