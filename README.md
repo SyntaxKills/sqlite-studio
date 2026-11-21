@@ -8,7 +8,5 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/SQLite-WebAssembly-003B57?style=flat-square&logo=sqlite&logoColor=white" alt="SQLite WASM" />
-  <img src="https://img.shields.io/badge/Arquitetura-Single--File%20(index.html)-2563EB?style=flat-square" alt="Single File Architecture" />
-  <img src="https://img.shields.io/badge/UI%2FUX-Dark%20%2B%20Blue%20Theme-0D1420?style=flat-square" alt="Dark Theme" />
   <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="MIT License" />
 </p>
